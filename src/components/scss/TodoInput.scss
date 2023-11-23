@@ -46,6 +46,8 @@
     &:active {
       background: #fa5252;
     }
+
+    transform: translate(-50%, 50%) rotate(45deg);
   }
 
   z-index: 5; // 템플릿보다 위로 뜰 수 있도록
