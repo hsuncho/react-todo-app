@@ -5,7 +5,7 @@ import TodoInput from './TodoInput';
 import './scss/TodoTemplate.scss';
 
 const TodoTemplate = () => {
-  // 서버에 할 일 모고록(json)을 요청(fetch)해서 받아와야 함. -> 나중에 하자
+  // 서버에 할 일 목록(json)을 요청(fetch)해서 받아와야 함. -> 나중에 하자
 
   // todos 배열을 상태 관리
   const [todos, setTodos] = useState([
@@ -62,10 +62,45 @@ const TodoTemplate = () => {
     });
   };
 
+  // 할 일 삭제 처리 함수
+  const removeTodo = (id) => {
+    // 주어진 배열의 값들을 순회하여 조건에 맞는 요소들만 모아서 새로운 배열로 리턴
+    setTodos(todos.filter((todo) => todo.id !== id));
+  };
+
+  // filter: 조건과 일치하는 객체만 받음
+  // map: 모든 할 일을 전부 다 받아야 해
+
+  // 할 일 체크 처리 함수
+  const checkTodo = (id) => {
+    // const copyTodos = [...todos];
+    // for (let cTodo of copyTodos) {
+    //   if (cTodo.id === id) {
+    //     cTodo.done = !cTodo.done;
+    //   }
+    // }
+    // setTodos(copyTodos);
+
+    setTodos(
+      todos.map(
+        (
+          todo // todos라는 상태배열을 map으로 돌리고 있고 todo라는 할 일 객체가 하나씩 오고 있음
+        ) => (todo.id === id ? { ...todo, done: !todo.done } : todo) // 삼항연산식: 매개값으로 온 할 일 객체의 아이디와 아이디와 일치하니?
+      )
+    );
+  };
+
+  // 체크가 안된 할 일의 개수 카운트하기
+  const countRestTodo = () => todos.filter((todo) => !todo.done).length;
+
   return (
     <div className='TodoTemplate'>
-      <TodoHeader />
-      <TodoMain todoList={todos} />
+      <TodoHeader count={countRestTodo} />
+      <TodoMain
+        todoList={todos}
+        remove={removeTodo}
+        check={checkTodo}
+      />
       <TodoInput addTodo={addTodo} />
     </div>
   );
