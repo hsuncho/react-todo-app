@@ -1,0 +1,70 @@
+.form-wrapper {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+
+  .insert-form {
+    background: #f8f9fa;
+    padding: 32px 32px 72px;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+    border-top: 1px solid #e9ecef;
+
+    input {
+      padding: 12px;
+      border-radius: 4px;
+      border: 1px solid #94989b;
+      width: 100%; // form 태그의 width 따라감
+      outline: none;
+      font-size: 18px;
+      box-sizing: border-box; // box의 크기는 유지되고 내부 content가 작아짐
+      // padding 줄 때 크기 늘어나지 않게 하기 위해
+    }
+  }
+}
+
+.insert-btn {
+  background: #38d9a9;
+
+  &:hover {
+    background: #63e6be;
+  }
+
+  &:active {
+    background-color: #20c997;
+  }
+
+  &.open {
+    // if class 'open' is added
+    background: #ff6b6b;
+
+    &:hover {
+      background: #ff8787;
+    }
+
+    &:active {
+      background: #fa5252;
+    }
+  }
+
+  z-index: 5; // 템플릿보다 위로 뜰 수 있도록
+  cursor: pointer;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  font-size: 60px;
+
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 50%);
+
+  color: white;
+  border: none;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.125s ease-in; // 시간 지연
+}
