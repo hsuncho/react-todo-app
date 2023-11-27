@@ -4,9 +4,12 @@ import TodoMain from './TodoMain';
 import TodoInput from './TodoInput';
 import './scss/TodoTemplate.scss';
 
+import { API_BASE_URL as BASE, TODO } from '../../config/host-config';
+
 const TodoTemplate = () => {
   // 서버에 할 일 목록(json)을 요청(fetch)해서 받아와야 함.
-  const API_BASE_URL = 'http://localhost:8182/api/todos'; // 요청 변수화
+  // const API_BASE_URL = 'http://localhost:8182/api/todos'; // 요청 변수화
+  const API_BASE_URL = BASE + TODO;
 
   // todos 배열을 상태 관리
   const [todos, setTodos] = useState([]); // 나중에 fetch를 이용해서 백엔드에 요청 보내야 해
