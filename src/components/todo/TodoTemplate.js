@@ -28,7 +28,7 @@ const TodoTemplate = () => {
     자식 컴포넌트에서 전달받은 함수를 호출하면서 매개값으로 데이터를 전달
   */
 
-  const addTodo = (todoText) => {
+  const addTodo = async (todoText) => {
     const newTodo = {
       title: todoText,
     };
@@ -44,16 +44,26 @@ const TodoTemplate = () => {
     //   return [...oldTodos, newTodo];
     // });
 
-    fetch(API_BASE_URL, {
+    const res = await fetch(API_BASE_URL, {
       // 요청 정보를 객체로 표현
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(newTodo), // JSON 형태로 바꾸어서 보내야 해
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        setTodos(json.todos);
-      });
+    });
+
+    const json = await res.json();
+    setTodos(json.todos);
+
+    // fetch(API_BASE_URL, {
+    //   // 요청 정보를 객체로 표현
+    //   method: 'POST',
+    //   headers: { 'content-type': 'application/json' },
+    //   body: JSON.stringify(newTodo), // JSON 형태로 바꾸어서 보내야 해
+    // })
+    //   .then((res) => res.json())
+    //   .then((json) => {
+    //     setTodos(json.todos);
+    //   });
   };
 
   // 할 일 삭제 처리 함수
