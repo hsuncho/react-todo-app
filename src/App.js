@@ -7,6 +7,7 @@ import { Route, Routes } from 'react-router-dom';
 import Join from './components/user/Join';
 import Login from './components/user/Login';
 import { AuthContextProvider } from './utils/AuthContext';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
   return (

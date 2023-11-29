@@ -3,12 +3,15 @@ import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Header.scss';
 import AuthContext from '../../utils/AuthContext';
+import { getLoginUserInfo, isLogin } from '../../utils/login-util';
 
 const Header = () => {
   const redirection = useNavigate();
 
   // AuthContext에서 로그인 상태를 가져옵니다.
-  const { isLoggedIn, userName, onLogout } = useContext(AuthContext);
+  const { onLogout, isLoggedIn, userName } = useContext(AuthContext);
+
+  // const { username: userName } = getLoginUserInfo();
 
   // 로그아웃 핸들러
   const logoutHandler = () => {
