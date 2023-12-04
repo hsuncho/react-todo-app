@@ -1,24 +1,56 @@
+import React, { useContext, useEffect, useState } from 'react';
 import { AppBar, Grid, Toolbar, Typography } from '@mui/material';
-import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Header.scss';
+import { isLogin, getLoginUserInfo } from '../../utils/login-util';
 import AuthContext from '../../utils/AuthContext';
-import { getLoginUserInfo, isLogin } from '../../utils/login-util';
+import { API_BASE_URL, USER } from '../../config/host-config';
 
 const Header = () => {
+  const profileRequestURL = `${API_BASE_URL}${USER}/load-profile`;
+
   const redirection = useNavigate();
 
-  // AuthContext에서 로그인 상태를 가져옵니다.
-  const { onLogout, isLoggedIn, userName } = useContext(AuthContext);
+  // 프로필 이미지 url 상태 변수
+  const [profileUrl, setProfileUrl] = useState(null);
 
-  // const { username: userName } = getLoginUserInfo();
+  // AuthContext에서 로그인 상태를 가져옵니다.
+  const { isLoggedIn, userName, onLogout } = useContext(AuthContext);
 
   // 로그아웃 핸들러
   const logoutHandler = () => {
-    // AuthContext의 onLogout 함수를 호출하여 로그인 상태를 업데이트합니다.
+    // AuthContext의 onLogout 함수를 호출하여 로그인 상태를 업데이트 합니다.
     onLogout();
     redirection('/login');
   };
+
+  // 프로필 이미지 요청(/load-profile)
+  const fetchProfileImage = async () => {
+    const res = await fetch(profileRequestURL, {
+      method: 'GET',
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('ACCESS_TOKEN'),
+      },
+    });
+
+    if (res.status === 200) {
+      // 서버에서는 byte[]로 직렬화된 이미지가 응답되므로
+      // blob()을 통해 전달받아야 한다. (json() xxx)
+      const profileBlob = await res.blob();
+      // 해당 이미지를 imgUrl로 변경
+      const imgUrl = window.URL.createObjectURL(profileBlob);
+      setProfileUrl(imgUrl);
+    } else {
+      const err = await res.text();
+      setProfileUrl(null);
+    }
+  };
+
+  // 로그인의 상태가 변화될 때 화면이 리렌더링 되고,
+  // 그에 맞는 회원의 프로필 이미지 요청이 들어갈 수 있도록 처리
+  useEffect(() => {
+    if (isLoggedIn) fetchProfileImage(); // false로 바뀌었을 때는 함수 호출 x
+  }, [isLoggedIn]);
 
   return (
     <AppBar
@@ -44,8 +76,20 @@ const Header = () => {
               }}
             >
               <Typography variant='h4'>
-                {isLoggedIn ? userName + '님' : '오늘'}의 할 일
+                {isLoggedIn ? userName + '님' : '오늘'}의 할일
               </Typography>
+              {isLoggedIn && (
+                <img
+                  src={profileUrl || require('../../assets/img/anonymous.jpg')}
+                  alt='profile_image'
+                  style={{
+                    marginLeft: 20,
+                    width: 75,
+                    height: 75,
+                    borderRadius: '50%',
+                  }}
+                />
+              )}
             </div>
           </Grid>
 
